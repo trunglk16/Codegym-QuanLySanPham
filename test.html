@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .display-none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<table class="part1" border="1px">
+    <tr>
+        <th colspan="2"> Sản phẩm mới</th>
+    </tr>
+    <tr>
+        <td><input type="text" id="newName" placeholder="Insert product name"></td>
+        <td><input type="button" class="btn" id="addBtn" onclick="btn.add();" value="Add"></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th>PRODUCTS</th>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <strong>Product name</strong>
+        </td>
+        <td>
+           Total:  <span id="number"></span>
+        </td>
+
+    </tr>
+    <tbody id="products">
+
+    </tbody>
+
+</table>
+<div class="display-none" id="edit">
+    <input type="text" id="editName">
+    <input type="button" onclick="editNew()" value="Edit">
+    <input type="button" onclick="cancel()" value="Cancel">
+</div>
+<script>
+    var j;
+    var products = ["Vegetable", "Beaf", "Meat"];
+
+    var btn = new function () {
+        this.list = document.getElementById("products");
+        this.printAll = function () {
+            if (products.length === 0){
+                document.getElementById("number").innerHTML = products.length + " product"
+            }
+
+            document.getElementById("number").innerHTML = products.length + " products";
+            var data = "";
+            if (products.length > 0) {
+                for (var i = 0; i < products.length; i++) {
+                    data += '<tr>';
+                    data += '<td>' + products[i] + '</td>';
+                    data += '<td><input type="button" onclick="btn.edit(' + i + ')" value = "Edit"></td>';
+                    data += '<td><input type="button" onclick="btn.rm(' + i + ')" value="Remove" ></td>';
+                    data += '</tr>';
+                }
+            }
+            return this.list.innerHTML = data;
+        }
+        this.add = function () {
+            console.log("ts")
+
+            var newP = document.getElementById("newName");
+            var product = newP.value;
+            if (product) {
+                console.log("ts")
+                products.push(product.trim());
+                newP.value = "";
+                this.printAll();
+            }
+        };
+        this.edit = function (item) {
+            document.getElementById("edit").classList.remove("display-none");
+            var oldItem = document.getElementById("editName")
+            oldItem.value = products[item];
+            j = item;
+        };
+
+        this.rm = function (item) {
+            products.splice(item, 1);
+            this.printAll();
+        }
+    };
+
+    function editNew() {
+        var newItem = document.getElementById("editName").value;
+        if (newItem !== "") {
+            products[j] = newItem;
+            btn.printAll();
+        } else {
+            var miss = document.getElementById("editName");
+            miss.setAttribute("placeholder", "Insert somethings");
+            btn.printAll();
+
+        }
+    }
+
+
+    function cancel() {
+        document.getElementById("edit").classList.add("display-none");
+    }
+
+    btn.printAll()
+
+</script>
+
+
+</body>
+</html>
